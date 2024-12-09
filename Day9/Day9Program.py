@@ -44,6 +44,41 @@ def partOne():
     print(total)
 
 
+def findEmptySpace(n, lst):
+    for i in range(len(lst) - n + 1):
+        if lst[i:i + n] == ['.'] * n:
+            return i
+    return -1
+def partTwo():
+    moving_id = 1
+    while moving_id < len(disk_map):
+        if not "." in disk_map[:-moving_id]:
+            break
+        char = disk_map[-moving_id]
+        if char != ".":
+            lengthOfUsed = 1
+            while (disk_map[-(moving_id+1)] == char):
+                lengthOfUsed += 1
+                moving_id += 1
+            
+            moveTo = findEmptySpace(lengthOfUsed, disk_map)
+            if (moveTo < len(disk_map)-moving_id and moveTo != -1):
+                for i in range(moveTo, moveTo+lengthOfUsed):
+                    disk_map[i] = char
+                    for j in range(lengthOfUsed):
+                        disk_map[-(moving_id)+j] = "."
+        moving_id += 1
 
+    total = 0
+    for checksum_pos in range(len(disk_map)):
+        checksum_val = disk_map[checksum_pos]
+        if checksum_val != ".":
+            total += int(checksum_val)*checksum_pos
+
+    print(total)
+
+
+partOne()
+partTwo()
 
 print(str(time.time()-start_time) + " seconds")
